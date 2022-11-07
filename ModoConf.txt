@@ -1,0 +1,18 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial SerialBlue(10, 11); // RX, TX
+
+void setup() {
+  Serial.begin(9600);
+  SerialBlue.begin(38400);
+  Serial.println("Goodnight moon!");
+}
+
+void loop() { // run over and over
+  if (SerialBlue.available()) {
+    Serial.write(SerialBlue.read());
+  }
+  if (Serial.available()) {
+    SerialBlue.write(Serial.read());
+  }
+}

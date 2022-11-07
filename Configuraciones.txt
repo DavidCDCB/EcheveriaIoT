@@ -1,0 +1,21 @@
+Comandos AT para conexión Bluethoot con el escalvo
+AT+PSWD=1234
+AT+ROLE=1
+AT+CMODE=0
+AT+BIND=98D3,51,FD9BFD
+AT+UART=38400,0,0
+
+Compilación desde CLI:
+sudo python3 pyDuino3.py ProtoBlue uno /dev/ttyACM0
+
+De esta forma se compila en linux si en winduss no funciona de la misma forma consultar:
+https://arduino.github.io/arduino-cli/0.21/installation/
+https://arduino.github.io/arduino-cli/0.21/commands/arduino-cli_compile/
+
+Agregación de realtime en flutter
+dart pub global activate flutterfire_cli
+flutterfire configure --project=pruebabd-7538a
+
+Endpoints actuales:
+/apimata
+/apimataHistorico
