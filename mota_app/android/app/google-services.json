@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1005652515792",
+    "firebase_url": "https://pruebabd-7538a-default-rtdb.firebaseio.com",
+    "project_id": "pruebabd-7538a",
+    "storage_bucket": "pruebabd-7538a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005652515792:android:0f794acef4bdb960ad77d5",
+        "android_client_info": {
+          "package_name": "com.example.mota_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005652515792-sqtt5v5l53p5k0a039r3or1165mvfign.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpeJP9YbKuCKU2YQBBFU2pdElDP7PuT8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005652515792-sqtt5v5l53p5k0a039r3or1165mvfign.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
