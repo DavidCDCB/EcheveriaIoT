@@ -30,6 +30,13 @@
             {
               "client_id": "1005652515792-sqtt5v5l53p5k0a039r3or1165mvfign.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1005652515792-ospubvg1kr7tvq5cu1vc1321tv9deqem.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motaApp"
+              }
             }
           ]
         }

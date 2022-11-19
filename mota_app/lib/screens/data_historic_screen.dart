@@ -48,6 +48,7 @@ class _DataHistoricScreenState extends State<DataHistoricScreen> {
                     ),
                   );
                 } else {
+                  // return Text("${snapshot.hasData}");
                   return const LoadingScreen();
                 }
               },
@@ -56,15 +57,5 @@ class _DataHistoricScreenState extends State<DataHistoricScreen> {
             return const LoadingScreen();
           }
         });
-  }
-
-  _lista(List list) {
-    List<Widget> widgets = [];
-    for (var item in list) {
-      widgets.add(ListTile(
-        title: Text("${item['FechaCompleta']}"),
-      ));
-    }
-    return widgets;
   }
 }

@@ -35,9 +35,9 @@ class DBService2 {
   }
 
   List sortData(Map? res) {
-    List<dynamic> _list = [];
+    List<dynamic> list = [];
     for (var item in res!.keys) {
-      _list.add({
+      list.add({
         "FechaCompleta": res[item]["Fecha"] + res[item]["Hora"],
         "Fecha": res[item]["Fecha"],
         "Hora": res[item]["Hora"],
@@ -45,13 +45,13 @@ class DBService2 {
         "Temperatura": res[item]["Temperatura"],
       });
     }
-    _list.sort(
+    list.sort(
       (a, b) {
         return b["FechaCompleta"].toString().toLowerCase().compareTo(
               a["FechaCompleta"].toString().toLowerCase(),
             );
       },
     );
-    return _list;
+    return list;
   }
 }

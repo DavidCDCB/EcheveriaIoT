@@ -72,8 +72,7 @@ class DefaultFirebaseOptions {
     projectId: 'pruebabd-7538a',
     databaseURL: 'https://pruebabd-7538a-default-rtdb.firebaseio.com',
     storageBucket: 'pruebabd-7538a.appspot.com',
-    iosClientId:
-        '1005652515792-ospubvg1kr7tvq5cu1vc1321tv9deqem.apps.googleusercontent.com',
+    iosClientId: '1005652515792-ospubvg1kr7tvq5cu1vc1321tv9deqem.apps.googleusercontent.com',
     iosBundleId: 'com.example.motaApp',
   );
 }

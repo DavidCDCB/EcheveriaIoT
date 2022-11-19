@@ -29,8 +29,11 @@ class _DaTableState extends State<DaTable> {
           DataTable(
             columns: <DataColumn>[
               DataColumn(
-                onSort: (columnIndex, ascending) =>
-                    _a(columnIndex, ascending, "FechaCompleta"),
+                onSort: (columnIndex, ascending) => isFiltered
+                    ? _onSorting(
+                        filteredData, columnIndex, ascending, "FechaCompleta")
+                    : _onSorting(
+                        widget.data, columnIndex, ascending, "FechaCompleta"),
                 label: const Expanded(
                   child: Text(
                     'Fecha',
@@ -55,8 +58,19 @@ class _DaTableState extends State<DaTable> {
                 ),
               ),
               DataColumn(
-                onSort: (columnIndex, ascending) =>
-                    _a(columnIndex, ascending, "Humedad"),
+                onSort: (columnIndex, ascending) => isFiltered
+                    ? _onSorting(
+                        filteredData,
+                        columnIndex,
+                        ascending,
+                        "Humedad",
+                      )
+                    : _onSorting(
+                        widget.data,
+                        columnIndex,
+                        ascending,
+                        "Humedad",
+                      ),
                 label: const Expanded(
                   child: Text(
                     'Hum.',
@@ -69,8 +83,11 @@ class _DaTableState extends State<DaTable> {
                 ),
               ),
               DataColumn(
-                onSort: (columnIndex, ascending) =>
-                    _a(columnIndex, ascending, "Temperatura"),
+                onSort: (columnIndex, ascending) => isFiltered
+                    ? _onSorting(
+                        filteredData, columnIndex, ascending, "Temperatura")
+                    : _onSorting(
+                        widget.data, columnIndex, ascending, "Temperatura"),
                 label: const Expanded(
                   child: Text(
                     'Temp.(Tierra)',
@@ -83,8 +100,11 @@ class _DaTableState extends State<DaTable> {
                 ),
               ),
               DataColumn(
-                onSort: (columnIndex, ascending) =>
-                    _a(columnIndex, ascending, "Temperatura"),
+                onSort: (columnIndex, ascending) => isFiltered
+                    ? _onSorting(
+                        filteredData, columnIndex, ascending, "Temperatura")
+                    : _onSorting(
+                        widget.data, columnIndex, ascending, "Temperatura"),
                 label: const Expanded(
                   child: Text(
                     'Temp.(Aire)',
@@ -106,19 +126,19 @@ class _DaTableState extends State<DaTable> {
     );
   }
 
-  _a(columnIndex, ascending, String key) {
+  _onSorting(dataList, columnIndex, ascending, String key) {
     setState(
       () {
         isAscending = !isAscending;
         isAscending
-            ? widget.data.sort(
+            ? dataList.sort(
                 (a, b) {
                   return b[key].toString().toLowerCase().compareTo(
                         a[key].toString().toLowerCase(),
                       );
                 },
               )
-            : widget.data.sort(
+            : dataList.sort(
                 (b, a) {
                   return b[key].toString().toLowerCase().compareTo(
                         a[key].toString().toLowerCase(),

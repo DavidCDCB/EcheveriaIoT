@@ -6,10 +6,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   DBService2 dataService = DBService2();
   var lastData = {};
   @override
@@ -32,14 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           snapshot.data as Widget,
-                          // _dataActual(),
-                          // Flexible(
-                          //   child: ListView(
-                          //     padding: const EdgeInsets.all(8),
-                          //     children: snapshot.data as List<Widget>,
-                          //   ),
-                          // ),
-                          Image.asset("assets/images/IconMota.png", scale: 6),
+                          Image.asset("assets/images/IconMota.png", scale: 3.5),
                           _datosAdicionales(),
                         ],
                       ),
@@ -57,69 +50,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<Widget> _actualCard() async {
-    late List<Widget> _tempList;
+    late List<Widget> tempList;
+    double heightScreen = MediaQuery.of(context).size.height;
     await dataService.getLastData().then(
       (value) {
         try {
-          var humedad = int.parse(value!['Humedad']);
-          var temperatura = int.parse(value['Temperatura']);
-          _tempList = [
+          int humedad = int.parse(value!['Humedad']);
+          int temperatura = int.parse(value['Temperatura']);
+          tempList = [
             const Text(
               "Última lectura",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontSize: 40,
-              ),
+              style: TextStyle(color: Colors.blueAccent, fontSize: 40),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Humedad: $humedad",
-              style: TextStyle(
-                color: humedad > 50 ? Colors.red : Colors.green,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              "Temperatura: $temperatura",
-              style: TextStyle(
-                color: temperatura > 50 ? Colors.red : Colors.green,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              "Temperatura: $temperatura",
-              style: TextStyle(
-                color: temperatura > 50 ? Colors.red : Colors.green,
-                fontSize: 20,
-              ),
-            ),
+            const SizedBox(height: 10),
+            _a("Humedad", humedad),
+            const SizedBox(height: 5),
+            _a("Temperatura", temperatura),
+            const SizedBox(height: 5),
+            _a("Temperatura", temperatura),
           ];
         } catch (e) {
-          _tempList = [
+          tempList = [
             const Text(
               "Algo salió mal...",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontSize: 40,
-              ),
+              style: TextStyle(color: Colors.blueAccent, fontSize: 40),
             ),
-            const SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             Text(
               "Error: $e",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
+              style: const TextStyle(color: Colors.black, fontSize: 20),
             ),
           ];
         }
@@ -127,8 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.1),
+      padding: EdgeInsets.symmetric(vertical: heightScreen * 0.08),
       child: Center(
         child: Card(
           shape: RoundedRectangleBorder(
@@ -140,13 +98,22 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.all(30.0),
             child: Column(
-              children: _tempList,
+              children: tempList,
             ),
           ),
         ),
       ),
     );
-    ;
+  }
+
+  Text _a(String text, int value) {
+    return Text(
+      "$text: $value",
+      style: TextStyle(
+        color: value > 50 ? Colors.red : Colors.green,
+        fontSize: 20,
+      ),
+    );
   }
 
   _datosAdicionales() {

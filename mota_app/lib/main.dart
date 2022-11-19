@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
       initialRoute: 'home',
       routes: {
         'dataHistoric': (_) => const DataHistoricScreen(),
-        'home': (_) => const TimeseriesChartExample(),
+        'home': (_) => const HomeScreen(),
+        'chart': (_) => const GraphicsWidget(),
       },
     );
   }
