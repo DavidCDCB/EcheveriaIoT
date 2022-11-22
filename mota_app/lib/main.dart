@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mota_app/screens/data_screen.dart';
+import 'package:mota_app/screens/data_historic_screen.dart';
+import 'package:mota_app/screens/home_screen.dart';
+import 'package:mota_app/widgets/graphic_widget.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,19 +22,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 236, 255, 245),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          color: Color.fromARGB(255, 53, 161, 102),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Color.fromARGB(255, 53, 161, 102), elevation: 0),
       ),
-      home: const DataScreen(),
+      initialRoute: 'home',
+      routes: {
+        'dataHistoric': (_) => const DataHistoricScreen(),
+        'home': (_) => const HomeScreen(),
+        'chart': (_) => const GraphicsWidget(),
+      },
     );
   }
 }

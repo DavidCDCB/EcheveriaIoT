@@ -1,14 +1,30 @@
 import 'package:firebase_database/firebase_database.dart';
 
 class DBService2 {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("apimataHistorico");
+  DatabaseReference ref1 = FirebaseDatabase.instance.ref("apimataHistorico");
+  DatabaseReference ref2 = FirebaseDatabase.instance.ref("apimata");
 
-  Stream<DatabaseEvent> dataStream() {
-    return ref.onChildAdded;
+  Stream<DatabaseEvent> alldataStream() {
+    // return ref1.onValue;
+    return ref1.onValue;
   }
 
-  Future<List?> getData() async {
-    DatabaseEvent event = await ref.once();
+  Stream<DatabaseEvent> dataStream() {
+    return ref2.onValue;
+    // return ref2.onChildChanged;
+  }
+
+  Future<Map?> getLastData() async {
+    DatabaseEvent event = await ref2.once();
+    Map? res = event.snapshot.value as Map?;
+    if (event.snapshot.value.toString() != "null") {
+      return res;
+    }
+    return {};
+  }
+
+  Future<List?> getAllData() async {
+    DatabaseEvent event = await ref1.once();
     Map? res = event.snapshot.value as Map?;
 
     if (event.snapshot.value.toString() != "null") {
@@ -19,27 +35,23 @@ class DBService2 {
   }
 
   List sortData(Map? res) {
-    List<dynamic> _list = [];
+    List<dynamic> list = [];
     for (var item in res!.keys) {
-      // res[item]["Fecha"]
-      // var parsedDate = DateTime.parse('1974-03-20 00:00:00.000');
-      String fecha = res[item]["Fecha"];
-      String hora = res[item]["Hora"];
-      var parsedDate = fecha + " " + hora;
-      _list.add({
-        "Fecha": parsedDate,
+      list.add({
+        "FechaCompleta": res[item]["Fecha"] + res[item]["Hora"],
+        "Fecha": res[item]["Fecha"],
+        "Hora": res[item]["Hora"],
         "Humedad": res[item]["Humedad"],
         "Temperatura": res[item]["Temperatura"],
       });
     }
-    // _list.sort((a, b) => a.Fecha.compareTo(b.Fecha));
-    _list.sort(
+    list.sort(
       (a, b) {
-        return b["Fecha"].toString().toLowerCase().compareTo(
-              a["Fecha"].toString().toLowerCase(),
+        return b["FechaCompleta"].toString().toLowerCase().compareTo(
+              a["FechaCompleta"].toString().toLowerCase(),
             );
       },
     );
-    return _list;
+    return list;
   }
 }
