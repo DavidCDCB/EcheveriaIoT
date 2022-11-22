@@ -1,9 +1,10 @@
 import serial # pip install pyserial==3.5
 import os
 import sys
-import requests
+import datetime
 import threading
 import firebase_admin
+from random import randint
 from time import sleep, strftime
 from firebase_admin import credentials
 from firebase_admin import db
@@ -50,6 +51,23 @@ def in_out():
 		raw_data = str(Serial.readline().decode().strip('\r\n'))
 		print(raw_data)
 
+def make_data_fake():
+	json_data = []
+	dia = datetime.datetime.strptime("2022-9-5", "%Y-%m-%d")
+	hora = datetime.datetime.strptime("18:04:30", "%X")
+	for i in range(50):
+		json_object = {}
+		dia = dia + datetime.timedelta(days=1)
+		for j in range(5):
+			json_object["Fecha"] = str(dia.strftime("%Y-%m-%d"))
+			hora = hora + datetime.timedelta(hours=1)
+			json_object["Hora"] = str(hora.strftime("%X"))
+			json_object["Temperatura"] = randint(10,80)
+			json_object["Humedad"] = randint(0,100)
+			json_data.append(json_object)
+			json_object = {}
+	return json_data
+
 def scan_input():
 	global raw_data, new_raw_data
 	while(True):
@@ -59,7 +77,7 @@ def scan_input():
 		if(raw_data != new_raw_data and "," in raw_data):
 			json_data = json_decode(raw_data)
 			put_data(json_data)
-			json_data["Fecha"] = strftime("%d/%m/%Y")
+			json_data["Fecha"] = strftime("%Y-%m-%d")
 			json_data["Hora"] = strftime("%X")
 			post_data(json_data)
 			print(f"Enviado: {json_data}")
@@ -88,7 +106,14 @@ connect_db(DATABASE)
 database_put_ref = db.reference("/apimata")
 database_post_ref = db.reference("/apimataHistorico")
 
+
+
 '''
+fake_data = make_data_fake()
+for fake in fake_data:
+	print(fake)
+	post_data(fake)
+
 json_data = json_decode("90,45")
 put_data(json_data)
 json_data["Fecha"] = strftime("%d/%m/%Y")
