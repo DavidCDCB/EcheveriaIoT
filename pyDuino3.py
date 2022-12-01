@@ -20,10 +20,11 @@ BAUD = 9600
 # sudo python3 pyDuino3.py ProtoBlue uno /dev/ttyACM0
 
 DATABASE = "https://pruebabd-7538a-default-rtdb.firebaseio.com/"
-KEYS = ["Temperatura", "Humedad"]
+KEYS = ["Temperatura_a", "Humedad_a","Temperatura_t","Humedad_t"]
 
 raw_data = ""
 new_raw_data = ""
+invalido = False
 
 def connect_db(database_url):
 	cred = credentials.Certificate("./config.json")
@@ -62,27 +63,40 @@ def make_data_fake():
 			json_object["Fecha"] = str(dia.strftime("%Y-%m-%d"))
 			hora = hora + datetime.timedelta(hours=1)
 			json_object["Hora"] = str(hora.strftime("%X"))
-			json_object["Temperatura"] = randint(10,80)
-			json_object["Humedad"] = randint(0,100)
+			json_object["Temperatura_a"] = randint(15,25)
+			json_object["Humedad_a"] = randint(10,15)
+			json_object["Temperatura_t"] = randint(20,40)
+			json_object["Humedad_t"] = randint(40,60)
 			json_data.append(json_object)
 			json_object = {}
 	return json_data
+
+def is_invalid(raw_data):
+	if("," in raw_data):
+		if(raw_data.index(",") != 0 and raw_data.index(",") != len(raw_data)-1):
+			return False
+	if(raw_data != "Preparado..."):
+		print(f"--->Dato invalido!!! {raw_data}")
+	return True
 
 def scan_input():
 	global raw_data, new_raw_data
 	while(True):
 		raw_data = str(Serial.readline().decode().strip('\r\n'))
+
 		if(raw_data != ""):
 			print(raw_data)
-		if(raw_data != new_raw_data and "," in raw_data):
-			json_data = json_decode(raw_data)
-			put_data(json_data)
-			json_data["Fecha"] = strftime("%Y-%m-%d")
-			json_data["Hora"] = strftime("%X")
-			post_data(json_data)
-			print(f"Enviado: {json_data}")
-			Serial.write(bytes("OK", 'utf-8'))
-			new_raw_data = raw_data
+			if(raw_data != new_raw_data and is_invalid(raw_data) == False and invalido == False):
+				json_data = json_decode(raw_data)
+				put_data(json_data)
+				json_data["Fecha"] = strftime("%Y-%m-%d")
+				json_data["Hora"] = strftime("%X")
+				post_data(json_data)
+				print(f"Enviado: {json_data}")
+				Serial.write(bytes("OK", 'utf-8'))
+				new_raw_data = raw_data
+			
+			invalido = is_invalid(raw_data)
 
 if(COMPILE == True):
 	out = os.popen(f"arduino -v --upload {FILE}.ino --board arduino:avr:{BOARD} --port {PORT}")
@@ -106,13 +120,12 @@ connect_db(DATABASE)
 database_put_ref = db.reference("/apimata")
 database_post_ref = db.reference("/apimataHistorico")
 
-
-
 '''
 fake_data = make_data_fake()
 for fake in fake_data:
 	print(fake)
 	post_data(fake)
+
 
 json_data = json_decode("90,45")
 put_data(json_data)
@@ -122,4 +135,5 @@ post_data(json_data)
 
 print(database_post_ref.get())
 print(database_put_ref.get())
+
 '''
