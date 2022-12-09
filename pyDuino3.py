@@ -4,6 +4,7 @@ import sys
 import datetime
 import threading
 import firebase_admin
+import requests
 from random import randint
 from time import sleep, strftime
 from firebase_admin import credentials
@@ -38,11 +39,18 @@ def json_decode(raw_data):
 
 def put_data(data):
 	global database_put_ref
-	database_put_ref.update(data)
+	# requests.exceptions.ConnectionError
+	try:
+		database_put_ref.update(data)
+	except requests.exceptions.ConnectionError as e:
+		print("Error de conexión Web")
 
 def post_data(data):
 	global database_post_ref
-	database_post_ref.push(data)
+	try:
+		database_post_ref.push(data)
+	except requests.exceptions.ConnectionError as e:
+		print("Error de conexión Web")
 
 def in_out():
 	global raw_data
@@ -82,7 +90,10 @@ def is_invalid(raw_data):
 def scan_input():
 	global raw_data, new_raw_data
 	while(True):
-		raw_data = str(Serial.readline().decode().strip('\r\n'))
+		try:
+			raw_data = str(Serial.readline().decode().strip('\r\n'))
+		except UnicodeDecodeError as e:
+			print(e)
 
 		if(raw_data != ""):
 			print(raw_data)
@@ -120,12 +131,15 @@ connect_db(DATABASE)
 database_put_ref = db.reference("/apimata")
 database_post_ref = db.reference("/apimataHistorico")
 
+
+
+
 '''
+
 fake_data = make_data_fake()
 for fake in fake_data:
 	print(fake)
 	post_data(fake)
-
 
 json_data = json_decode("90,45")
 put_data(json_data)
