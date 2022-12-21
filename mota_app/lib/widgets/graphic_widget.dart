@@ -1,54 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class GraphicsWidget extends StatefulWidget {
-  const GraphicsWidget({Key? key}) : super(key: key);
+  final List data;
+  final String dataNameOne;
+  final String dataNameTwo;
+  const GraphicsWidget(
+      {Key? key,
+      required this.data,
+      required this.dataNameOne,
+      required this.dataNameTwo})
+      : super(key: key);
 
   @override
   State<GraphicsWidget> createState() => _GraphicsWidgetState();
 }
 
 class _GraphicsWidgetState extends State<GraphicsWidget> {
-  List<_SalesData> data = [
-    _SalesData('Jan', 35),
-    _SalesData('Feb', 28),
-    _SalesData('Mar', 34),
-    _SalesData('Apr', 32),
-    _SalesData('May', 40)
-  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Syncfusion Flutter chart'),
-        ),
-        body: Column(children: [
-          //Initialize the chart widget
-          SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              // Chart title
-              title: ChartTitle(text: 'Half yearly sales analysis'),
-              // Enable legend
-              legend: Legend(isVisible: true),
-              // Enable tooltip
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <ChartSeries<_SalesData, String>>[
-                LineSeries<_SalesData, String>(
-                    dataSource: data,
-                    xValueMapper: (_SalesData sales, _) => sales.year,
-                    yValueMapper: (_SalesData sales, _) => sales.sales,
-                    name: 'Sales',
-                    // Enable data label
-                    dataLabelSettings: const DataLabelSettings(isVisible: true))
-              ]),
-        ]));
+    String title = widget.dataNameOne.split("_")[0];
+    return chart("$title por día", widget.dataNameOne, widget.dataNameTwo);
   }
-}
 
-class _SalesData {
-  _SalesData(this.year, this.sales);
+  chart(String title, String lineNameOne, String lineNameTwo) {
+    return //Initialize the chart widget
+        SfCartesianChart(
+      primaryXAxis: CategoryAxis(),
+      // Chart title
+      title: ChartTitle(text: title),
+      // Enable legend
+      legend: Legend(isVisible: true),
+      // Enable tooltip
+      tooltipBehavior: TooltipBehavior(enable: true),
+      series: <ChartSeries<dynamic, String>>[
+        LineSeries<dynamic, String>(
+          dataSource: _sortData(widget.data),
+          xValueMapper: (dynamic meassure, _) => meassure["Hora"].toString(),
+          yValueMapper: (dynamic meassure, _) => meassure[lineNameOne],
+          name: lineNameOne,
+          // Enable data label
+          dataLabelSettings: const DataLabelSettings(isVisible: true),
+        ),
+        LineSeries<dynamic, String>(
+          dataSource: _sortData(widget.data),
+          xValueMapper: (dynamic meassure, _) => meassure["Hora"].toString(),
+          yValueMapper: (dynamic meassure, _) => meassure[lineNameTwo],
+          name: lineNameTwo,
+          // Enable data label
+          dataLabelSettings: const DataLabelSettings(isVisible: true),
+        ),
+      ],
+    );
+  }
 
-  final String year;
-  final double sales;
+  List _sortData(List list) {
+    list.sort(
+      (b, a) {
+        return b["FechaCompleta"].toString().toLowerCase().compareTo(
+              a["FechaCompleta"].toString().toLowerCase(),
+            );
+      },
+    );
+    return list;
+  }
 }

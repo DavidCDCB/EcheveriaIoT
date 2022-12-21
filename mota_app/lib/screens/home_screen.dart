@@ -25,7 +25,10 @@ class HomeScreenState extends State<HomeScreen> {
                   return Scaffold(
                     appBar: AppBar(
                         title: Row(
-                      children: const [Icon(Icons.grass), Text('  MotaApp')],
+                      children: const [
+                        Icon(Icons.grass),
+                        Text('  BushMonitor')
+                      ],
                     )),
                     body: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -55,19 +58,48 @@ class HomeScreenState extends State<HomeScreen> {
     await dataService.getLastData().then(
       (value) {
         try {
-          int humedad = int.parse(value!['Humedad']);
-          int temperatura = int.parse(value['Temperatura']);
+          int humedadA = int.parse(value!['Humedad_a']);
+          int humedadT = int.parse(value['Humedad_t']);
+          int temperaturaA = int.parse(value['Temperatura_a']);
+          int temperaturaT = int.parse(value['Temperatura_t']);
           tempList = [
             const Text(
               "Última lectura",
               style: TextStyle(color: Colors.blueAccent, fontSize: 40),
             ),
             const SizedBox(height: 10),
-            _a("Humedad", humedad),
+            Text(
+              "Humedad aire: $humedadA%",
+              style: TextStyle(
+                color: humedadA < 50 ? Colors.red : Colors.green,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Humedad tierra: $humedadT%",
+              style: TextStyle(
+                color: humedadT < 50 ? Colors.red : Colors.green,
+                fontSize: 20,
+              ),
+            ),
             const SizedBox(height: 5),
-            _a("Temperatura", temperatura),
+            Text(
+              "Temperatura aire: $temperaturaA°C",
+              style: TextStyle(
+                color: temperaturaA > 50 ? Colors.red : Colors.green,
+                fontSize: 20,
+              ),
+            ),
             const SizedBox(height: 5),
-            _a("Temperatura", temperatura),
+            Text(
+              "Temperatura tierra: $temperaturaT°C",
+              style: TextStyle(
+                color: temperaturaT > 50 ? Colors.red : Colors.green,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 5),
           ];
         } catch (e) {
           tempList = [

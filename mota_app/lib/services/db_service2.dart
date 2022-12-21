@@ -38,11 +38,14 @@ class DBService2 {
     List<dynamic> list = [];
     for (var item in res!.keys) {
       list.add({
-        "FechaCompleta": res[item]["Fecha"] + res[item]["Hora"],
+        "FechaCompleta":
+            DateTime.parse("${res[item]['Fecha']} ${res[item]['Hora']}"),
         "Fecha": res[item]["Fecha"],
         "Hora": res[item]["Hora"],
-        "Humedad": res[item]["Humedad"],
-        "Temperatura": res[item]["Temperatura"],
+        "Humedad_a": int.parse(res[item]["Humedad_a"].toString()),
+        "Humedad_t": int.parse(res[item]["Humedad_t"].toString()),
+        "Temperatura_a": int.parse(res[item]["Temperatura_a"].toString()),
+        "Temperatura_t": int.parse(res[item]["Temperatura_t"].toString()),
       });
     }
     list.sort(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mota_app/screens/analytics_screen.dart';
 // import 'package:intl/intl.dart';
 // import 'package:intl/intl.dart';
 
@@ -60,20 +61,12 @@ class _DaTableState extends State<DaTable> {
               DataColumn(
                 onSort: (columnIndex, ascending) => isFiltered
                     ? _onSorting(
-                        filteredData,
-                        columnIndex,
-                        ascending,
-                        "Humedad",
-                      )
+                        filteredData, columnIndex, ascending, "Humedad_a")
                     : _onSorting(
-                        widget.data,
-                        columnIndex,
-                        ascending,
-                        "Humedad",
-                      ),
+                        widget.data, columnIndex, ascending, "Humedad_a"),
                 label: const Expanded(
                   child: Text(
-                    'Hum.',
+                    'Hum. aire',
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.black,
@@ -85,12 +78,12 @@ class _DaTableState extends State<DaTable> {
               DataColumn(
                 onSort: (columnIndex, ascending) => isFiltered
                     ? _onSorting(
-                        filteredData, columnIndex, ascending, "Temperatura")
+                        filteredData, columnIndex, ascending, "Humedad_t")
                     : _onSorting(
-                        widget.data, columnIndex, ascending, "Temperatura"),
+                        widget.data, columnIndex, ascending, "Humedad_t"),
                 label: const Expanded(
                   child: Text(
-                    'Temp.(Tierra)',
+                    'Hum. tierra',
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.black,
@@ -102,12 +95,29 @@ class _DaTableState extends State<DaTable> {
               DataColumn(
                 onSort: (columnIndex, ascending) => isFiltered
                     ? _onSorting(
-                        filteredData, columnIndex, ascending, "Temperatura")
+                        filteredData, columnIndex, ascending, "Temperatura_a")
                     : _onSorting(
-                        widget.data, columnIndex, ascending, "Temperatura"),
+                        widget.data, columnIndex, ascending, "Temperatura_a"),
                 label: const Expanded(
                   child: Text(
-                    'Temp.(Aire)',
+                    'Temp. aire',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.black,
+                      /* fontSize: 20.0,*/ fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              DataColumn(
+                onSort: (columnIndex, ascending) => isFiltered
+                    ? _onSorting(
+                        filteredData, columnIndex, ascending, "Temperatura_t")
+                    : _onSorting(
+                        widget.data, columnIndex, ascending, "Temperatura_t"),
+                label: const Expanded(
+                  child: Text(
+                    'Temp tierra.',
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       color: Colors.black,
@@ -155,9 +165,11 @@ class _DaTableState extends State<DaTable> {
       data.add(DataRow(cells: <DataCell>[
         DataCell(Text(item["Fecha"])),
         DataCell(Text(item["Hora"])),
-        DataCell(Text(item["Humedad"])),
-        DataCell(Text(item["Temperatura"])),
-        DataCell(Text(item["Temperatura"])),
+        DataCell(Text(item["Humedad_a"].toString())),
+        DataCell(Text(item["Humedad_t"].toString())),
+        DataCell(Text(item["Temperatura_a"].toString())),
+        DataCell(Text(item["Temperatura_t"].toString())),
+        // DataCell(Text(item["Temperatura"].toString())),
       ]));
     }
     return data;
@@ -180,7 +192,8 @@ class _DaTableState extends State<DaTable> {
                   lastDate: DateTime(2023),
                 ).then((value) {
                   if (value != null) {
-                    date = "${value.day}/${value.month}/${value.year}";
+                    date =
+                        "${value.year}-${value.month < 10 ? "0${value.month}" : value.month}-${value.day < 10 ? "0${value.day}" : value.day}";
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Selected date: $date')),
                     );
@@ -196,9 +209,6 @@ class _DaTableState extends State<DaTable> {
             ),
           ],
         ),
-        const SizedBox(
-          width: 20,
-        ),
         ButtonBar(
           alignment: MainAxisAlignment.center,
           children: [
@@ -210,6 +220,24 @@ class _DaTableState extends State<DaTable> {
                 setState(() => isFiltered = false);
               },
               child: const Text("Borrar filtro"),
+            ),
+          ],
+        ),
+        ButtonBar(
+          alignment: MainAxisAlignment.center,
+          children: [
+            OutlinedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) => AnalyticsScreen(
+                      data: widget.data,
+                    ),
+                  ),
+                );
+              },
+              child: const Text("Analytics"),
             ),
           ],
         ),

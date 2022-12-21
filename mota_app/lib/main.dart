@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mota_app/screens/analytics_screen.dart';
 import 'package:mota_app/screens/data_historic_screen.dart';
 import 'package:mota_app/screens/home_screen.dart';
 import 'package:mota_app/widgets/graphic_widget.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'dataHistoric': (_) => const DataHistoricScreen(),
         'home': (_) => const HomeScreen(),
-        'chart': (_) => const GraphicsWidget(),
+        // 'analytics': (_) => const AnalyticsScreen(),
       },
     );
   }
